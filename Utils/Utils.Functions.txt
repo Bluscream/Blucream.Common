@@ -1,0 +1,128 @@
+Running 'D:\Documents\PowerShell\profile.ps1'...
+Ran 'D:\Documents\PowerShell\profile.ps1'
+Line 41, Col 24:     public extern bool AllocConsole();
+Line 43, Col 32:     public static extern Int32 SetForegroundWindow(int hWnd);
+Line 45, Col 33:     public static extern IntPtr GetConsoleWindow();
+Line 47, Col 31:     public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+Line 49, Col 33:     public static extern IntPtr GetForegroundWindow();
+Line 51, Col 31:     public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+Line 53, Col 31:     public static extern bool GetFocusAssistState(out int state);
+Line 54, Col 29:     public static List<int> GetPadding(string input, int minWidth = 80, int padding = 10) {
+Line 60, Col 26:     public static string Pad(string input, string outer = "||", int minWidth = 80, int padding = 10) {
+Line 64, Col 26:     public static string Log(string text, int length = 73) {
+Line 73, Col 25:     public List<string> removeFromToRow(string from, string where, string to, string insert = "") {
+Line 81, Col 25:     public List<string> removeFromToRow(string from, List<string> where, string to, string insert = "") {
+Line 101, Col 24:     public static void Exit(int exitCode = 0) {
+Line 106, Col 24:     public static void RestartAsAdmin(string[] arguments) {
+Line 125, Col 24:     public static bool IsAdmin() {
+Line 140, Col 29:     public static List<int> GetPadding(string input, int minWidth = defaultMinWidth, int padding = defaultPadding) {
+Line 146, Col 26:     public static string Pad(string input, string outer = "||", int minWidth = defaultMinWidth, int padding = defaultPadding) {
+Line 150, Col 26:     public static string Fill(char c, int width = defaultMinWidth, int padding = defaultPadding) {
+Line 153, Col 26:     public static string Log(string text, int length = 73) {
+Line 162, Col 25:     public List<string> removeFromToRow(string from, string where, string to, string insert = "") {
+Line 170, Col 25:     public List<string> removeFromToRow(string from, List<string> where, string to, string insert = "") {
+Line 190, Col 24:     public static void Exit(int exitCode = 0) {
+Line 195, Col 24:     public static void RestartAsAdmin(string[] arguments) {
+Line 214, Col 24:     public static bool IsAdmin() {
+Line 228, Col 24:     public static void ErrorAndExit(string message, bool reinstall_overwolf = false) {
+Line 238, Col 24:     public static void CreateConsole() {
+Line 242, Col 24:     public static void SetConsoleTitle(string title) {
+Line 245, Col 24:     public static void SetConsoleEnabled(bool enabled) {
+Line 248, Col 24:     public static void Log(object message, params object[] args) {
+Line 253, Col 26:     public static string GetOwnPath() {
+Line 268, Col 24:     public static bool IsRunAsAdmin() {
+Line 274, Col 24:     public static void RelaunchAsAdmin(string[] args) {
+Line 283, Col 24:     public static void CreateConsole() {
+Line 287, Col 24:     public static void SetConsoleTitle(string title) {
+Line 290, Col 24:     public static void SetConsoleEnabled(bool enabled) {
+Line 293, Col 24:     public static void Log(object message, params object[] args) {
+Line 298, Col 26:     public static string GetOwnPath() {
+Line 313, Col 24:     public static bool IsRunAsAdmin() {
+Line 319, Col 24:     public static void RelaunchAsAdmin(string[] args) {
+Line 328, Col 28:     public static FileInfo getOwnPath() {
+Line 331, Col 24:     public static void BringSelfToFront() {
+Line 346, Col 24:     public static bool IsAlreadyRunning(string appName) {
+Line 353, Col 24:     public static void Exit() {
+Line 358, Col 24:     public static void RestartAsAdmin(string[] arguments) {
+Line 378, Col 24:     public static bool IsAdmin() {
+Line 394, Col 26:     public static string Base64Encode(string plainText) {
+Line 398, Col 26:     public static string Base64Decode(string base64EncodedData) {
+Line 402, Col 28:     public static FileInfo DownloadFile(string url, DirectoryInfo destinationPath, string fileName = null) {
+Line 407, Col 28:     public static FileInfo pickFile(string title = null, string initialDirectory = null, string filter = null) {
+Line 421, Col 28:     public static FileInfo saveFile(string title = null, string initialDirectory = null, string filter = null, string fileName = null, string content = null) {
+Line 438, Col 33:     public static DirectoryInfo pickFolder(string title = null, string initialDirectory = null) {
+Line 450, Col 27:     public static Process StartProcess(string file, string workDir = null, params string[] args) {
+Line 461, Col 30:     public static IPEndPoint ParseIPEndPoint(string endPoint) {
+Line 484, Col 24:     public static void Debug(object message, params object[] parms) {
+Line 487, Col 24:     public static void Log(object message, params object[] parms) {
+Line 491, Col 24:     public static void Error(object message, params object[] parms) {
+Line 495, Col 24:     public static void BigError(object message) {
+Line 500, Col 24:     public static void Warning(object message, params object[] parms) {
+Line 504, Col 24:     public static void Debug(object message, params object[] parms) {
+Line 507, Col 24:     public static void Log(object message, params object[] parms) {
+Line 511, Col 24:     public static void Error(object message, params object[] parms) {
+Line 515, Col 24:     public static void BigError(object message) {
+Line 519, Col 24:     public static void Warn(object message, params object[] parms) {
+Line 523, Col 24:     public static void HUDNotify(string header = null, string subtext = null, string cat = null, float? time = null) {
+Line 532, Col 24:     public static void SendChatNotification(object text, bool sendSoundNotification = false, bool displayInHistory = false) {
+Line 537, Col 26:     public static string GetPlayerNameById(string playerId) {
+Line 540, Col 24:     public static bool IsLocalPlayer(string playerId) {
+Line 543, Col 24:     public static void HUDNotify(string header = null, string subtext = null, string cat = null, float? time = null) {
+Line 553, Col 24:     public static void Debug(object message, params object[] parms) {
+Line 556, Col 24:     public static void Log(object message, params object[] parms) {
+Line 560, Col 24:     public static void Error(object message, params object[] parms) {
+Line 564, Col 24:     public static void BigError(object message) {
+Line 568, Col 24:     public static void Warn(object message, params object[] parms) {
+Line 572, Col 24:     public static void HUDNotify(string header = null, string subtext = null, string cat = null, float? time = null) {
+Line 581, Col 24:     public static bool PropsAllowed() {
+Line 595, Col 28:     public static FileInfo getOwnPath() {
+Line 598, Col 24:     public static void BringSelfToFront() {
+Line 613, Col 24:     public static bool IsAlreadyRunning(string appName) {
+Line 620, Col 24:     public static void Exit() {
+Line 625, Col 24:     public static void RestartAsAdmin(string[] arguments) {
+Line 645, Col 24:     public static bool IsAdmin() {
+Line 661, Col 26:     public static string Base64Encode(string plainText) {
+Line 665, Col 26:     public static string Base64Decode(string base64EncodedData) {
+Line 669, Col 28:     public static FileInfo DownloadFile(string url, DirectoryInfo destinationPath, string fileName = null) {
+Line 674, Col 24:     public static void ShowFileInExplorer(FileInfo file) {
+Line 677, Col 24:     public static void OpenFolderInExplorer(DirectoryInfo dir) {
+Line 681, Col 27:     public static Process StartProcess(string file, string workDir = null, params string[] args) {
+Line 692, Col 28:     public static FileInfo getOwnPath() {
+Line 695, Col 24:     public static void BringSelfToFront() {
+Line 710, Col 24:     public static bool IsAlreadyRunning(string appName) {
+Line 717, Col 24:     public static void Exit() {
+Line 722, Col 24:     public static void RestartAsAdmin(string[] arguments) {
+Line 742, Col 24:     public static bool IsAdmin() {
+Line 758, Col 26:     public static string Base64Encode(string plainText) {
+Line 762, Col 26:     public static string Base64Decode(string base64EncodedData) {
+Line 766, Col 28:     public static FileInfo DownloadFile(string url, DirectoryInfo destinationPath, string fileName = null) {
+Line 771, Col 28:     public static FileInfo pickFile(string title = null, string initialDirectory = null, string filter = null) {
+Line 785, Col 28:     public static FileInfo saveFile(string title = null, string initialDirectory = null, string filter = null, string fileName = null, string content = null) {
+Line 802, Col 33:     public static DirectoryInfo pickFolder(string title = null, string initialDirectory = null) {
+Line 806, Col 27:     public static Process StartProcess(string file, string workDir = null, params string[] args) {
+Line 815, Col 30:     public static IPEndPoint ParseIPEndPoint(string endPoint) {
+Line 837, Col 28:     public static FileInfo getOwnPath() {
+Line 840, Col 24:     public static bool IsAlreadyRunning(string appName) {
+Line 847, Col 24:     public static void Exit() {
+Line 852, Col 24:     public static void RestartAsAdmin(string[] arguments) {
+Line 872, Col 24:     public static bool IsAdmin() {
+Line 888, Col 26:     public static string Base64Encode(string plainText) {
+Line 892, Col 26:     public static string Base64Decode(string base64EncodedData) {
+Line 896, Col 28:     public static FileInfo DownloadFile(string url, DirectoryInfo destinationPath, string fileName = null) {
+Line 901, Col 24:     public static void ShowFileInExplorer(FileInfo file) {
+Line 904, Col 24:     public static void OpenFolderInExplorer(DirectoryInfo dir) {
+Line 907, Col 28:     public static FileInfo pickFile(string title = null, string initialDirectory = null, string filter = null) {
+Line 926, Col 27:     public static Process StartProcess(string file, string workDir = null, params string[] args) {
+Line 938, Col 24:     public static void HideConsoleWindow() {
+Line 952, Col 26:     public static string GetOwnPath() {
+Line 967, Col 24:     public static bool IsDoNotDisturbActiveRegistry() {
+Line 978, Col 24:     public static bool IsDoNotDisturbActiveFocusAssist() {
+Line 988, Col 24:     public static bool IsDoNotDisturbActiveFocusAssistCim() {
+Line 1006, Col 24:     public static bool IsDoNotDisturbActive() {
+Line 1009, Col 24:     public static void TryExitApplication() {
+Line 1050, Col 26:     public static Bitmap CreateDefaultIcon() {
+Line 1068, Col 23:     public static Uri BuildJoinLink(string worldId, string instanceId) {
+Line 1071, Col 24:     public static bool HandleJoin(string worldId, string instanceId, List<string> additionalArgs = null) {
+Line 1103, Col 27:     public static Process StartGame(Uri joinLink, List<string> additionalArgs = null) {
+Line 1119, Col 39:     public static IEnumerable<string> JoinListsUnique(params IEnumerable<IEnumerable<string>> arglists) {
+Line 1131, Col 24:     public static void RunAdditionalApps(List<List<string>> apps) {
