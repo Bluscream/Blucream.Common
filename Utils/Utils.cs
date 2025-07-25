@@ -212,112 +212,11 @@ public static class Utils
         return new string(c, width + padding * 2 + 4);
     }
 
-    public static string Log(string text, int length = 73)
-    {
-        text = "|| " + text;
-        for (int i = 0; text.Length < length; i++)
-        {
-            text += " ";
-        }
-        text = text + " ||";
-        Console.WriteLine(text);
-        return text;
-    }
 
-    public List<string> removeFromToRow(string from, string where, string to, string insert = "")
-    {
-        List<string> list;
-        if (where.Contains("\r\n"))
-            list = where.Split(new[] { "\r\n" }, StringSplitOptions.None).ToList();
-        else
-            list = where.Split(new[] { "\n" }, StringSplitOptions.None).ToList();
-        return removeFromToRow(from, list, to, insert);
-    }
 
-    public List<string> removeFromToRow(
-        string from,
-        List<string> where,
-        string to,
-        string insert = ""
-    )
-    {
-        int start = -1;
-        int end = -1;
-        for (int i = 0; i < where.Count; i++)
-        {
-            if (where[i] == from)
-            {
-                start = i;
-            }
-            if (start != -1 && where[i] == to)
-            {
-                end = i;
-                break;
-            }
-        }
-        if (start != -1 && end != -1)
-        {
-            where.RemoveRange(start, end - start + 1);
-        }
-        if (insert != "")
-        {
-            where.Insert(start, insert);
-        }
-        return where;
-    }
 
-    public static void Exit(int exitCode = 0)
-    {
-        Environment.Exit(exitCode);
-        var currentP = Process.GetCurrentProcess();
-        currentP.Kill();
-    }
 
-    public static void RestartAsAdmin(string[] arguments)
-    {
-        if (IsAdmin())
-            return;
-        ProcessStartInfo proc = new ProcessStartInfo();
-        proc.UseShellExecute = true;
-        proc.WorkingDirectory = Environment.CurrentDirectory;
-        proc.FileName = Assembly.GetEntryAssembly().CodeBase;
-        proc.Arguments += arguments.ToString();
-        proc.Verb = "runas";
-        try
-        {
-            Process.Start(proc);
-            Exit();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Unable to restart as admin automatically: {ex.Message}");
-            Console.WriteLine(
-                "This app has to run with elevated permissions (Administrator) to be able to modify files in the Overwolf folder!"
-            );
-            Console.ReadKey();
-            Exit();
-        }
-    }
 
-    public static bool IsAdmin()
-    {
-        bool isAdmin;
-        try
-        {
-            WindowsIdentity user = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(user);
-            isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            isAdmin = false;
-        }
-        catch (Exception)
-        {
-            isAdmin = false;
-        }
-        return isAdmin;
-    }
 
     public static void ErrorAndExit(string message, bool reinstall_overwolf = false)
     {
@@ -396,75 +295,13 @@ public static class Utils
         Process.Start(startInfo);
     }
 
-    public static void CreateConsole()
-    {
-        AllocConsole();
-        _consoleEnabled = true;
-    }
 
-    public static void SetConsoleTitle(string title)
-    {
-        Console.Title = title;
-    }
 
-    public static void SetConsoleEnabled(bool enabled)
-    {
-        _consoleEnabled = enabled;
-    }
 
-    public static void Log(object message, params object[] args)
-    {
-        if (!_consoleEnabled)
-            return;
-        var msg = message?.ToString() ?? string.Empty;
-        Console.WriteLine(args != null && args.Length > 0 ? string.Format(msg, args) : msg);
-    }
 
-    public static string GetOwnPath()
-    {
-        var possiblePaths = new List<string?>
-        {
-            Process.GetCurrentProcess().MainModule?.FileName,
-            AppContext.BaseDirectory,
-            Environment.GetCommandLineArgs().FirstOrDefault(),
-            Assembly.GetEntryAssembly()?.Location,
-            ".",
-        };
-        foreach (var path in possiblePaths.Where(p => !string.IsNullOrEmpty(p)))
-        {
-            if (System.IO.File.Exists(path!))
-            {
-                return System.IO.Path.GetFullPath(path!);
-            }
-        }
-        return string.Empty;
-    }
 
-    public static bool IsRunAsAdmin()
-    {
-        using (var identity = WindowsIdentity.GetCurrent())
-        {
-            var principal = new WindowsPrincipal(identity);
-            return principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-    }
 
-    public static void RelaunchAsAdmin(string[] args)
-    {
-        var exeName = GetOwnPath();
-        var startInfo = new ProcessStartInfo(exeName)
-        {
-            UseShellExecute = true,
-            Verb = "runas",
-            Arguments = args != null ? string.Join(" ", args) : string.Empty,
-        };
-        Process.Start(startInfo);
-    }
 
-    public static FileInfo getOwnPath()
-    {
-        return new FileInfo(Path.GetDirectoryName(Application.ExecutablePath));
-    }
 
     public static void BringSelfToFront()
     {
@@ -500,53 +337,7 @@ public static class Utils
         currentP.Kill();
     }
 
-    public static void RestartAsAdmin(string[] arguments)
-    {
-        if (IsAdmin())
-            return;
-        ProcessStartInfo proc = new ProcessStartInfo();
-        proc.UseShellExecute = true;
-        proc.WorkingDirectory = Environment.CurrentDirectory;
-        proc.FileName = Assembly.GetEntryAssembly().CodeBase;
-        proc.Arguments += arguments.ToString();
-        proc.Verb = "runas";
-        try
-        {
-            Process.Start(proc);
-            Exit();
-        }
-        catch (Exception)
-        {
-            // Logger.Error("Unable to restart as admin!", ex.Message);
-            MessageBox.Show(
-                "Unable to restart as admin for you. Please do this manually now!",
-                "Can't restart as admin",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error
-            );
-            Exit();
-        }
-    }
 
-    public static bool IsAdmin()
-    {
-        bool isAdmin;
-        try
-        {
-            WindowsIdentity user = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(user);
-            isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            isAdmin = false;
-        }
-        catch (Exception)
-        {
-            isAdmin = false;
-        }
-        return isAdmin;
-    }
 
     public static string Base64Encode(string plainText)
     {
@@ -740,42 +531,10 @@ public static class Utils
         Logger.Warning(message.ToString(), parms);
     }
 
-    public static void Debug(object message, params object[] parms)
-    {
-        if (!ModConfig.EnableLogging.Value)
-            return;
-    }
 
-    public static void Log(object message, params object[] parms)
-    {
-        if (!ModConfig.EnableLogging.Value)
-            return;
-        MelonLogger.Msg(message.ToString(), parms);
-    }
 
-    public static void Error(object message, params object[] parms)
-    {
-        if (!ModConfig.EnableLogging.Value)
-            return;
-        MelonLogger.Error(message.ToString(), parms);
-    }
 
-    public static void BigError(object message)
-    {
-        if (!ModConfig.EnableLogging.Value)
-            return;
-        MelonLogger.BigError(
-            MoreChatNotifications.Properties.AssemblyInfoParams.Name,
-            message.ToString()
-        );
-    }
 
-    public static void Warn(object message, params object[] parms)
-    {
-        if (!ModConfig.EnableLogging.Value)
-            return;
-        MelonLogger.Warning(message.ToString(), parms);
-    }
 
     public static void HUDNotify(
         string header = null,
@@ -827,79 +586,12 @@ public static class Utils
         return playerId == MetaPort.Instance.ownerId;
     }
 
-    public static void HUDNotify(
-        string header = null,
-        string subtext = null,
-        string cat = null,
-        float? time = null
-    )
-    {
-        if (!ModConfig.EnableMod.Value)
-            return;
-        cat ??= $"(Local) {Properties.AssemblyInfoParams.Name}";
-        if (time != null)
-        {
-            ViewManager.Instance.NotifyUser(cat, subtext, time.Value);
-        }
-        else
-        {
-            ViewManager.Instance.NotifyUserAlert(cat, header, subtext);
-        }
-    }
 
-    public static void Debug(object message, params object[] parms)
-    {
-        if (!ModConfig.EnableLogging.Value)
-            return;
-    }
 
-    public static void Log(object message, params object[] parms)
-    {
-        if (!ModConfig.EnableLogging.Value)
-            return;
-        MelonLogger.Msg(message.ToString(), parms);
-    }
 
-    public static void Error(object message, params object[] parms)
-    {
-        if (!ModConfig.EnableLogging.Value)
-            return;
-        MelonLogger.Error(message.ToString(), parms);
-    }
 
-    public static void BigError(object message)
-    {
-        if (!ModConfig.EnableLogging.Value)
-            return;
-        MelonLogger.BigError(Properties.AssemblyInfoParams.Name, message.ToString());
-    }
 
-    public static void Warn(object message, params object[] parms)
-    {
-        if (!ModConfig.EnableLogging.Value)
-            return;
-        MelonLogger.Warning(message.ToString(), parms);
-    }
 
-    public static void HUDNotify(
-        string header = null,
-        string subtext = null,
-        string cat = null,
-        float? time = null
-    )
-    {
-        if (!ModConfig.EnableHUDNotifications.Value)
-            return;
-        cat ??= $"(Local) {Properties.AssemblyInfoParams.Name}";
-        if (time != null)
-        {
-            ViewManager.Instance.NotifyUser(cat, subtext, time.Value);
-        }
-        else
-        {
-            ViewManager.Instance.NotifyUserAlert(cat, header, subtext);
-        }
-    }
 
     public static bool PropsAllowed()
     {
@@ -923,116 +615,14 @@ public static class Utils
         return true;
     }
 
-    public static FileInfo getOwnPath()
-    {
-        return new FileInfo(Path.GetFullPath(Application.ExecutablePath));
-    }
 
-    public static void BringSelfToFront()
-    {
-        var window = Program.mainWindow;
-        if (window.WindowState == FormWindowState.Minimized)
-            window.WindowState = FormWindowState.Normal;
-        else
-        {
-            window.TopMost = true;
-            window.Focus();
-            window.BringToFront();
-            window.TopMost = false;
-        }
-        Program.mainWindow.Activate();
-        Program.mainWindow.Focus();
-        SetForegroundWindow(SafeHandle.ToInt32());
-    }
 
-    public static bool IsAlreadyRunning(string appName)
-    {
-        System.Threading.Mutex m = new System.Threading.Mutex(false, appName);
-        if (m.WaitOne(1, false) == false)
-        {
-            return true;
-        }
-        return false;
-    }
 
-    public static void Exit()
-    {
-        Application.Exit();
-        var currentP = Process.GetCurrentProcess();
-        currentP.Kill();
-    }
 
-    public static void RestartAsAdmin(string[] arguments)
-    {
-        if (IsAdmin())
-            return;
-        ProcessStartInfo proc = new ProcessStartInfo();
-        proc.UseShellExecute = true;
-        proc.WorkingDirectory = Environment.CurrentDirectory;
-        proc.FileName = Assembly.GetEntryAssembly().CodeBase;
-        proc.Arguments += arguments.ToString();
-        proc.Verb = "runas";
-        try
-        {
-            Process.Start(proc);
-            Exit();
-        }
-        catch (Exception)
-        {
-            // Logger.Error("Unable to restart as admin!", ex.Message);
-            MessageBox.Show(
-                "Unable to restart as admin for you. Please do this manually now!",
-                "Can't restart as admin",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error
-            );
-            Exit();
-        }
-    }
 
-    public static bool IsAdmin()
-    {
-        bool isAdmin;
-        try
-        {
-            WindowsIdentity user = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(user);
-            isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            isAdmin = false;
-        }
-        catch (Exception)
-        {
-            isAdmin = false;
-        }
-        return isAdmin;
-    }
 
-    public static string Base64Encode(string plainText)
-    {
-        var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-        return Convert.ToBase64String(plainTextBytes);
-    }
 
-    public static string Base64Decode(string base64EncodedData)
-    {
-        var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
-        return Encoding.UTF8.GetString(base64EncodedBytes);
-    }
 
-    public static FileInfo DownloadFile(
-        string url,
-        DirectoryInfo destinationPath,
-        string fileName = null
-    )
-    {
-        if (fileName == null)
-            fileName = url.Split('/').Last();
-        // Main.webClient.DownloadFile(url, Path.Combine(destinationPath.FullName, fileName));
-        return new FileInfo(Path.Combine(destinationPath.FullName, fileName));
-    }
 
     public static void ShowFileInExplorer(FileInfo file)
     {
@@ -1044,401 +634,38 @@ public static class Utils
         StartProcess("explorer.exe", null, dir.FullName.Quote());
     }
 
-    public static Process StartProcess(FileInfo file, params string[] args) =>
         StartProcess(file.FullName, file.DirectoryName, args);
 
-    public static Process StartProcess(string file, string workDir = null, params string[] args)
-    {
-        ProcessStartInfo proc = new ProcessStartInfo();
-        proc.FileName = file;
-        proc.Arguments = string.Join(" ", args);
-        Console.WriteLine(proc.FileName + " " + proc.Arguments);
-        if (workDir != null)
-        {
-            proc.WorkingDirectory = workDir;
-            Console.WriteLine("WorkingDirectory: " + proc.WorkingDirectory);
-        }
-        return Process.Start(proc);
-    }
 
-    public static FileInfo getOwnPath()
-    {
-        return new FileInfo(Path.GetDirectoryName(Application.ExecutablePath));
-    }
 
-    public static void BringSelfToFront()
-    {
-        var window = Program.mainWindow;
-        if (window.WindowState == FormWindowState.Minimized)
-            window.WindowState = FormWindowState.Normal;
-        else
-        {
-            window.TopMost = true;
-            window.Focus();
-            window.BringToFront();
-            window.TopMost = false;
-        }
-        Program.mainWindow.Activate();
-        Program.mainWindow.Focus();
-        SetForegroundWindow(SafeHandle.ToInt32());
-    }
 
-    public static bool IsAlreadyRunning(string appName)
-    {
-        System.Threading.Mutex m = new System.Threading.Mutex(false, appName);
-        if (m.WaitOne(1, false) == false)
-        {
-            return true;
-        }
-        return false;
-    }
 
-    public static void Exit()
-    {
-        Application.Exit();
-        var currentP = Process.GetCurrentProcess();
-        currentP.Kill();
-    }
 
-    public static void RestartAsAdmin(string[] arguments)
-    {
-        if (IsAdmin())
-            return;
-        ProcessStartInfo proc = new ProcessStartInfo();
-        proc.UseShellExecute = true;
-        proc.WorkingDirectory = Environment.CurrentDirectory;
-        proc.FileName = Assembly.GetEntryAssembly().CodeBase;
-        proc.Arguments += arguments.ToString();
-        proc.Verb = "runas";
-        try
-        {
-            Process.Start(proc);
-            Exit();
-        }
-        catch (Exception)
-        {
-            // Logger.Error("Unable to restart as admin!", ex.Message);
-            MessageBox.Show(
-                "Unable to restart as admin for you. Please do this manually now!",
-                "Can't restart as admin",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error
-            );
-            Exit();
-        }
-    }
 
-    public static bool IsAdmin()
-    {
-        bool isAdmin;
-        try
-        {
-            WindowsIdentity user = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(user);
-            isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            isAdmin = false;
-        }
-        catch (Exception)
-        {
-            isAdmin = false;
-        }
-        return isAdmin;
-    }
 
-    public static string Base64Encode(string plainText)
-    {
-        var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-        return Convert.ToBase64String(plainTextBytes);
-    }
 
-    public static string Base64Decode(string base64EncodedData)
-    {
-        var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
-        return Encoding.UTF8.GetString(base64EncodedBytes);
-    }
 
-    public static FileInfo DownloadFile(
-        string url,
-        DirectoryInfo destinationPath,
-        string fileName = null
-    )
-    {
-        if (fileName == null)
-            fileName = url.Split('/').Last();
-        // Main.webClient.DownloadFile(url, Path.Combine(destinationPath.FullName, fileName));
-        return new FileInfo(Path.Combine(destinationPath.FullName, fileName));
-    }
 
-    public static FileInfo pickFile(
-        string title = null,
-        string initialDirectory = null,
-        string filter = null
-    )
-    {
-        using (var fileDialog = new OpenFileDialog())
-        {
-            if (title != null)
-                fileDialog.Title = title;
-            fileDialog.InitialDirectory =
-                initialDirectory ?? "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}";
-            if (filter != null)
-                fileDialog.Filter = filter;
-            fileDialog.Multiselect = false;
-            var result = fileDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                var file = new FileInfo(fileDialog.FileName);
-                if (file.Exists)
-                    return file;
-            }
-            return null;
-        }
-    }
 
-    public static FileInfo saveFile(
-        string title = null,
-        string initialDirectory = null,
-        string filter = null,
-        string fileName = null,
-        string content = null
-    )
-    {
-        using (var fileDialog = new SaveFileDialog())
-        {
-            if (title != null)
-                fileDialog.Title = title;
-            fileDialog.InitialDirectory =
-                initialDirectory ?? "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}";
-            if (filter != null)
-                fileDialog.Filter = filter;
-            fileDialog.FileName = fileName ?? null;
-            var result = fileDialog.ShowDialog();
-            if (result != DialogResult.OK || fileDialog.FileName.IsNullOrWhiteSpace())
-                return null;
-            if (content != null)
-            {
-                using (var fileStream = fileDialog.OpenFile())
-                {
-                    byte[] info = new UTF8Encoding(true).GetBytes(content);
-                    fileStream.Write(info, 0, info.Length);
-                }
-            }
-            return new FileInfo(fileDialog.FileName);
-        }
-    }
 
-    public static DirectoryInfo pickFolder(string title = null, string initialDirectory = null)
-    {
-        throw new NotImplementedException();
-    }
 
-    public static Process StartProcess(FileInfo file, params string[] args) =>
         StartProcess(file.FullName, file.DirectoryName, args);
 
-    public static Process StartProcess(string file, string workDir = null, params string[] args)
-    {
-        ProcessStartInfo proc = new ProcessStartInfo();
-        proc.FileName = file;
-        proc.Arguments = string.Join(" ", args);
-        if (workDir != null)
-        {
-            proc.WorkingDirectory = workDir;
-        }
-        return Process.Start(proc);
-    }
 
-    public static IPEndPoint ParseIPEndPoint(string endPoint)
-    {
-        string[] ep = endPoint.Split(':');
-        if (ep.Length < 2)
-            return null;
-        IPAddress ip;
-        if (ep.Length > 2)
-        {
-            if (!IPAddress.TryParse(string.Join(":", ep, 0, ep.Length - 1), out ip))
-            {
-                return null;
-            }
-        }
-        else
-        {
-            if (!IPAddress.TryParse(ep[0], out ip))
-            {
-                return null;
-            }
-        }
-        int port;
-        if (
-            !int.TryParse(
-                ep[ep.Length - 1],
-                NumberStyles.None,
-                NumberFormatInfo.CurrentInfo,
-                out port
-            )
-        )
-        {
-            return null;
-        }
-        return new IPEndPoint(ip, port);
-    }
 
-    public static FileInfo getOwnPath()
-    {
-        return new FileInfo(Path.GetFullPath(Application.ExecutablePath));
-    }
 
-    public static bool IsAlreadyRunning(string appName)
-    {
-        System.Threading.Mutex m = new System.Threading.Mutex(false, appName);
-        if (m.WaitOne(1, false) == false)
-        {
-            return true;
-        }
-        return false;
-    }
 
-    public static void Exit()
-    {
-        Application.Exit();
-        var currentP = Process.GetCurrentProcess();
-        currentP.Kill();
-    }
 
-    public static void RestartAsAdmin(string[] arguments)
-    {
-        if (IsAdmin())
-            return;
-        ProcessStartInfo proc = new ProcessStartInfo();
-        proc.UseShellExecute = true;
-        proc.WorkingDirectory = Environment.CurrentDirectory;
-        proc.FileName = Assembly.GetEntryAssembly().CodeBase;
-        proc.Arguments += arguments.ToString();
-        proc.Verb = "runas";
-        try
-        {
-            Process.Start(proc);
-            Exit();
-        }
-        catch (Exception)
-        {
-            // Logger.Error("Unable to restart as admin!", ex.Message);
-            MessageBox.Show(
-                "Unable to restart as admin for you. Please do this manually now!",
-                "Can't restart as admin",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error
-            );
-            Exit();
-        }
-    }
 
-    public static bool IsAdmin()
-    {
-        bool isAdmin;
-        try
-        {
-            WindowsIdentity user = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(user);
-            isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            isAdmin = false;
-        }
-        catch (Exception)
-        {
-            isAdmin = false;
-        }
-        return isAdmin;
-    }
 
-    public static string Base64Encode(string plainText)
-    {
-        var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-        return Convert.ToBase64String(plainTextBytes);
-    }
 
-    public static string Base64Decode(string base64EncodedData)
-    {
-        var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
-        return Encoding.UTF8.GetString(base64EncodedBytes);
-    }
 
-    public static FileInfo DownloadFile(
-        string url,
-        DirectoryInfo destinationPath,
-        string fileName = null
-    )
-    {
-        if (fileName == null)
-            fileName = url.Split('/').Last();
-        // Main.webClient.DownloadFile(url, Path.Combine(destinationPath.FullName, fileName));
-        return new FileInfo(Path.Combine(destinationPath.FullName, fileName));
-    }
 
-    public static void ShowFileInExplorer(FileInfo file)
-    {
-        StartProcess("explorer.exe", null, "/select, " + file.FullName.Quote());
-    }
 
-    public static void OpenFolderInExplorer(DirectoryInfo dir)
-    {
-        StartProcess("explorer.exe", null, dir.FullName.Quote());
-    }
 
-    public static FileInfo pickFile(
-        string title = null,
-        string initialDirectory = null,
-        string filter = null
-    )
-    {
-        using (var fileDialog = new OpenFileDialog())
-        {
-            if (initialDirectory != null)
-                fileDialog.Title = title;
-            if (initialDirectory != null)
-            {
-                fileDialog.InitialDirectory = Environment.GetFolderPath(
-                    Environment.SpecialFolder.MyComputer
-                );
-            }
-            else
-            {
-                fileDialog.InitialDirectory = initialDirectory;
-            }
-            if (filter != null)
-                fileDialog.Filter = filter;
-            fileDialog.Multiselect = false;
-            var result = fileDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                var file = new FileInfo(fileDialog.FileName);
-                if (file.Exists)
-                    return file;
-            }
-            return null;
-        }
-    }
 
-    public static Process StartProcess(FileInfo file, params string[] args) =>
         StartProcess(file.FullName, file.DirectoryName, args);
 
-    public static Process StartProcess(string file, string workDir = null, params string[] args)
-    {
-        ProcessStartInfo proc = new ProcessStartInfo();
-        proc.FileName = file;
-        proc.Arguments = string.Join(" ", args);
-        Logger.Debug("Starting Process: {0} {1}", proc.FileName, proc.Arguments);
-        if (workDir != null)
-        {
-            proc.WorkingDirectory = workDir;
-            Logger.Debug("Working Directory: {0}", proc.WorkingDirectory);
-        }
-        return Process.Start(proc);
-    }
 
     public static void HideConsoleWindow()
     {
@@ -1461,25 +688,6 @@ public static class Utils
         }
     }
 
-    public static string GetOwnPath()
-    {
-        var possiblePaths = new List<string>
-        {
-            Process.GetCurrentProcess().MainModule?.FileName,
-            AppContext.BaseDirectory,
-            Environment.GetCommandLineArgs().FirstOrDefault(),
-            Assembly.GetEntryAssembly()?.Location,
-            ".",
-        };
-        foreach (var path in possiblePaths)
-        {
-            if (!string.IsNullOrEmpty(path) && System.IO.File.Exists(path))
-            {
-                return System.IO.Path.GetFullPath(path);
-            }
-        }
-        return null;
-    }
 
     public static bool IsDoNotDisturbActiveRegistry()
     {
